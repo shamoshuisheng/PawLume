@@ -1,1 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PawLume · Support</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%23C9A87C'/><polygon points='12 3 14 9 20 9 15.5 13 17.5 19 12 15.5 6.5 19 8.5 13 4 9 10 9 12 3' fill='%237A5C3E'/></svg>">
+<style>
+  :root {
+    --bg: #0e0c0a;
+    --surface: #17130e;
+    --surface-2: #221b13;
+    --border: #33291d;
+    --text: #f4efe7;
+    --muted: #a89a86;
+    --accent: #C9A87C;
+    --accent-2: #E8C98F;
+    --accent-grad: linear-gradient(135deg, #7A5C3E 0%, #C9A87C 100%);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Noto Sans SC", "Noto Sans JP", "Noto Sans KR", "Helvetica Neue", sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  /* Language switcher */
+  .lang-bar {
+    display: flex; justify-content: flex-end; gap: 6px;
+    padding: 20px 0 0;
+    flex-wrap: wrap;
+  }
+  .lang-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 5px 11px;
+    border-radius: 7px;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .lang-btn:hover { border-color: var(--accent); color: var(--text); }
+  .lang-btn.active {
+    background: var(--accent-grad);
+    color: #fff; border-color: transparent;
+    font-weight: 600;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 48px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-mark {
+    width: 60px; height: 60px; margin: 0 auto 20px;
+    border-radius: 16px;
+    background: var(--accent-grad);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 32px rgba(201, 168, 124, 0.30);
+  }
+  .logo-mark svg { width: 32px; height: 32px; }
+  .hero h1 {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .hero p { color: var(--muted); font-size: 15px; max-width: 520px; margin: 0 auto; }
+
+  .contact-bar {
+    margin: 32px auto 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .contact-bar .label { color: var(--muted); font-size: 13px; }
+  .contact-bar .email { font-weight: 600; font-size: 15px; }
+
+  section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+  h2 {
+    font-size: 19px; font-weight: 700; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2::before {
+    content: ""; width: 4px; height: 18px; border-radius: 2px;
+    background: var(--accent-grad);
+  }
+
+  .feat-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+  }
+  .feat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .feat h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .feat p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .feat .icon {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: var(--surface-2); margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .feat .icon svg { width: 16px; height: 16px; stroke: var(--accent-2); fill: none; stroke-width: 2; }
+
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .faq-q {
+    padding: 16px 18px;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: 600; font-size: 14.5px;
+    user-select: none;
+  }
+  .faq-q:hover { background: var(--surface-2); }
+  .faq-q .arrow {
+    transition: transform 0.2s;
+    color: var(--muted); font-size: 12px;
+    flex-shrink: 0; margin-left: 12px;
+  }
+  .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+  .faq-a-inner {
+    padding: 0 18px 16px;
+    color: var(--muted); font-size: 14px; line-height: 1.75;
+  }
+  .faq-item.open .faq-a { max-height: 600px; }
+  .faq-a-inner strong { color: var(--text); font-weight: 600; }
+  .faq-a-inner a { color: var(--accent-2); }
+
+  .info-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .info-block p { color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+  .info-block p:last-child { margin-bottom: 0; }
+  .info-block strong { color: var(--text); }
+
+  footer {
+    padding: 32px 0 48px;
+    text-align: center;
+    color: var(--muted); font-size: 12.5px;
+  }
+  footer .links { margin-bottom: 10px; }
+  footer .links a { margin: 0 10px; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 32px 0 28px; }
+    .hero h1 { font-size: 22px; }
+    .feat-grid { grid-template-columns: 1fr; }
+    .contact-bar { flex-direction: column; align-items: flex-start; }
+    h2 { font-size: 17px; }
+    .lang-btn { padding: 4px 8px; font-size: 11.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Language switcher -->
+  <div class="lang-bar" id="langBar"></div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 3 14 9 20 9 15.5 13 17.5 19 12 15.5 6.5 19 8.5 13 4 9 10 9 12 3" fill="white" stroke="none"/>
+      </svg>
+    </div>
+    <h1 data-i18n="heroTitle"></h1>
+    <p data-i18n="heroDesc"></p>
+    <div class="contact-bar">
+      <div>
+        <div class="label" data-i18n="contactLabel"></div>
+        <div class="email">shamoshuisheng@163.com</div>
+      </div>
+      <a href="mailto:shamoshuisheng@163.com" style="font-size:14px;font-weight:600;" data-i18n="contactBtn"></a>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section>
+    <h2 data-i18n="featTitle"></h2>
+    <div class="feat-grid" id="featGrid"></div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <h2 data-i18n="faqTitle"></h2>
+    <div id="faqList"></div>
+  </section>
+
+  <!-- Subscription -->
+  <section>
+    <h2 data-i18n="subTitle"></h2>
+    <div class="info-block" id="subBlock"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="links">
+      <a href="https://shamoshuisheng.github.io/privacy" data-i18n="privacy"></a>
+      <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-i18n="terms"></a>
+      <a href="mailto:shamoshuisheng@163.com" data-i18n="contactUs"></a>
+    </div>
+    <div>© 2026 PawLume. All rights reserved.</div>
+  </footer>
+
+</div>
+
+<script>
+var EMAIL = "shamoshuisheng@163.com";
+var PRIVACY = "https://shamoshuisheng.github.io/privacy";
+var EULA = "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
+
+// ===== TRANSLATIONS =====
+var I18N = {};
+
+I18N["zh-CN"] = {
+  langName: "简体中文",
+  heroTitle: "PawLume 技术支持",
+  heroDesc: "为 TA 留住温柔的光。本地 AI 宠物抠图 + 纪念册管理，所有处理均在设备端完成，绝不上传任何服务器。",
+  contactLabel: "遇到问题？发邮件给我们",
+  contactBtn: "发送邮件 →",
+  featTitle: "常用功能指引",
+  feats: [
+    { icon: "cutout", title: "AI 宠物抠图", desc: "导入照片 → 选择抠图 → 本地 Core ML 识别宠物主体 → 调节阈值/羽化 → 生成透明 PNG。实时预览，精细可控。" },
+    { icon: "enhance", title: "老照片增强", desc: "导入模糊、泛黄的老照片 → 一键增强 → 本地模型提升清晰度并降噪，让珍贵回忆重焕光彩。" },
+    { icon: "filter", title: "滤镜与背景替换", desc: "100 款滤镜、7 大分类，滑块调节强度；也可替换纯色或自定义背景，或保留透明主体。" },
+    { icon: "export", title: "纪念册导出", desc: "进入纪念册 → 选择 PDF / 短视频 / 纪念卡 / 景深墙纸 → 无水印导出并分享给亲友。" }
+  ],
+  faqTitle: "常见问题",
+  faqs: [
+    { q: "我的照片会上传到服务器吗？", a: "<strong>不会。</strong>PawLume 所有 AI 处理（抠图、老照片增强）与照片存储均在您的设备本地完成，使用内置 Core ML 模型，照片绝不会离开您的设备。" },
+    { q: "AI 抠图效果不理想怎么办？", a: "请依次尝试：<br>1. 在抠图参数中调节<strong>阈值</strong>与<strong>羽化半径</strong>，使边缘更贴合；<br>2. 若画面有多只宠物或杂物，开启<strong>仅保留最大主体</strong>；<br>3. 选择主体清晰、与背景对比明显的照片效果最佳；<br>4. 如仍不理想，请将截图与照片发送至 " + EMAIL + "。" },
+    { q: "老照片增强效果不明显？", a: "增强针对轻微模糊、噪点、划痕与褪色的老照片效果显著。若照片严重破损、人脸大面积缺失，恢复程度会有限——建议保留原图。" },
+    { q: "导出的文件保存在哪里？", a: "导出完成后可选择：<strong>保存到相册</strong>（图片/视频）、<strong>存储到「文件」</strong>（任意格式）或<strong>分享</strong>给其他 App。也可随时回到对应纪念册详情页重新导出。" },
+    { q: "免费版和 Pro 有什么区别？", a: "<strong>免费版：</strong>提供 5 次 AI 抠图 + 老照片增强配额，导出带水印。<br><strong>Pro：</strong>无限量抠图与增强、导出无水印、完整 4 款 PDF 模板、1080p 短视频导出、iCloud 备份与纪念日提醒。" },
+    { q: "景深墙纸需要什么条件？", a: "景深墙纸需要 <strong>iOS 16.1 或更高版本</strong>的锁屏 Depth Effect 支持。旧系统将生成静态墙纸，功能不受影响。" },
+    { q: "Pro 订阅如何退款？", a: "订阅通过 Apple 官方渠道处理，退款需通过 Apple 申请：<br>前往 <a href='https://reportaproblem.apple.com' target='_blank'>reportaproblem.apple.com</a> → 登录 Apple ID → 找到对应订阅 → 申请退款。" },
+    { q: "如何取消自动续订？", a: "在 iPhone 上打开 <strong>设置 → 你的 Apple ID → 订阅</strong> → 找到 PawLume → 取消订阅。取消后当前周期内仍可使用全部功能。" }
+  ],
+  subTitle: "订阅与权限",
+  subLines: [
+    "<strong>免费版：</strong>提供 5 次 AI 抠图与老照片增强配额，导出带水印。",
+    "<strong>Pro 订阅：</strong>解锁无限量宠物抠图与老照片增强、单张导出无水印、完整 PDF 纪念册模板、1080p 短视频纪念册、iCloud 备份与纪念日提醒。支持月订阅 / 年订阅（含 7 天免费试用）/ 终身买断。",
+    "<strong>自动续订：</strong>订阅到期前 24 小时自动扣费，可随时在 Apple ID 设置中取消。",
+    "<strong>隐私政策：</strong><a href='" + PRIVACY + "' target='_blank'>查看完整隐私政策</a> · <a href='" + EULA + "' target='_blank'>标准许可协议（EULA）</a>"
+  ],
+  privacy: "隐私政策",
+  terms: "服务条款",
+  contactUs: "联系我们"
+};
+
+I18N["en"] = {
+  langName: "English",
+  heroTitle: "PawLume Support",
+  heroDesc: "Preserve their gentle light. On-device AI pet cutout + memory album. All processing stays on your device — nothing is uploaded to any server.",
+  contactLabel: "Need help? Email us",
+  contactBtn: "Send Email →",
+  featTitle: "Quick Guides",
+  feats: [
+    { icon: "cutout", title: "AI Pet Cutout", desc: "Import a photo → choose Cutout → on-device Core ML detects your pet → adjust threshold & feather → save as transparent PNG. Fine-tuned, real-time preview." },
+    { icon: "enhance", title: "Old Photo Enhancement", desc: "Import blurry or faded photos → one-tap enhance → local model sharpens and reduces noise, bringing precious memories back to life." },
+    { icon: "filter", title: "Filters & Backgrounds", desc: "100 filters across 7 categories with adjustable intensity sliders; swap in solid colors, custom images, or keep a transparent cutout." },
+    { icon: "export", title: "Export Your Album", desc: "Open an album → choose PDF / Video / Memorial Card / Depth Wallpaper → export watermark-free and share with loved ones." }
+  ],
+  faqTitle: "FAQ",
+  faqs: [
+    { q: "Are my photos uploaded to a server?", a: "<strong>No.</strong> All AI processing (cutout, old-photo enhancement) and photo storage happen locally on your device using built-in Core ML models. Your photos never leave your device." },
+    { q: "The AI cutout result isn't great. What should I do?", a: "Try in order:<br>1. Adjust <strong>threshold</strong> and <strong>feather radius</strong> for tighter edges;<br>2. If there are multiple pets or objects, enable <strong>Keep Largest Subject Only</strong>;<br>3. Clear, high-contrast photos work best;<br>4. If it still fails, send a screenshot and the photo to " + EMAIL + "." },
+    { q: "Old photo enhancement looks subtle?", a: "Enhancement works best on photos with mild blur, noise, scratches or fading. Heavily damaged or missing-face photos recover only partially — we recommend keeping the original." },
+    { q: "Where are my exported files saved?", a: "After export, choose <strong>Save to Photos</strong> (image/video), <strong>Save to Files</strong> (any format), or <strong>Share</strong> to other apps. You can always re-export from the album detail page." },
+    { q: "What's the difference between Free and Pro?", a: "<strong>Free:</strong> 5 AI cutout + enhancement credits, watermarked exports.<br><strong>Pro:</strong> unlimited cutouts & enhancement, watermark-free exports, all 4 PDF templates, 1080p video albums, iCloud backup & anniversary reminders." },
+    { q: "What do I need for Depth Wallpaper?", a: "Depth Wallpaper requires <strong>iOS 16.1 or later</strong> with Depth Effect on the Lock Screen. On older systems a static wallpaper is generated instead — functionality is unaffected." },
+    { q: "How do I get a refund for Pro?", a: "Subscriptions are handled by Apple. To request a refund:<br>Go to <a href='https://reportaproblem.apple.com' target='_blank'>reportaproblem.apple.com</a> → sign in with your Apple ID → find the subscription → request refund." },
+    { q: "How do I cancel auto-renewal?", a: "On your iPhone, go to <strong>Settings → your Apple ID → Subscriptions</strong> → find PawLume → Cancel Subscription. You'll keep Pro features until the current billing period ends." }
+  ],
+  subTitle: "Subscription & Access",
+  subLines: [
+    "<strong>Free:</strong> 5 AI cutout & enhancement credits, watermarked exports.",
+    "<strong>Pro:</strong> Unlimited pet cutouts and old-photo enhancement, watermark-free single exports, all PDF album templates, 1080p video albums, iCloud backup & anniversary reminders. Monthly / Yearly (7-day free trial) / Lifetime plans available.",
+    "<strong>Auto-renewal:</strong> Charged 24 hours before the end of each period. Cancel anytime in your Apple ID settings.",
+    "<strong>Privacy Policy:</strong> <a href='" + PRIVACY + "' target='_blank'>View full privacy policy</a> · <a href='" + EULA + "' target='_blank'>Standard EULA</a>"
+  ],
+  privacy: "Privacy Policy",
+  terms: "Terms of Service",
+  contactUs: "Contact Us"
+};
+
+I18N["zh-TW"] = {
+  langName: "繁體中文",
+  heroTitle: "PawLume 技術支援",
+  heroDesc: "為牠，留住溫柔的光。本地 AI 寵物摳圖 + 紀念冊管理，所有處理均在裝置端完成，絕不上傳任何伺服器。",
+  contactLabel: "遇到問題？寄信給我們",
+  contactBtn: "寄信 →",
+  featTitle: "常用功能指引",
+  feats: [
+    { icon: "cutout", title: "AI 寵物摳圖", desc: "匯入照片 → 選擇摳圖 → 本地 Core ML 辨識寵物主體 → 調整閾值/羽化 → 產生透明 PNG。即時預覽，精細可控。" },
+    { icon: "enhance", title: "老照片增強", desc: "匯入模糊、泛黃的老照片 → 一鍵增強 → 本地模型提升清晰度並降噪，讓珍貴回憶重現光彩。" },
+    { icon: "filter", title: "濾鏡與背景替換", desc: "100 款濾鏡、7 大分類，滑桿調整強度；也可替換純色或自訂背景，或保留透明主體。" },
+    { icon: "export", title: "紀念冊匯出", desc: "進入紀念冊 → 選擇 PDF / 短片 / 紀念卡 / 景深桌布 → 無浮水印匯出並分享給親友。" }
+  ],
+  faqTitle: "常見問題",
+  faqs: [
+    { q: "我的照片會上傳到伺服器嗎？", a: "<strong>不會。</strong>PawLume 所有 AI 處理（摳圖、老照片增強）與照片儲存均在您的裝置本地完成，使用內建 Core ML 模型，照片絕不會離開您的裝置。" },
+    { q: "AI 摳圖效果不理想怎麼辦？", a: "請依序嘗試：<br>1. 在摳圖參數中調整<strong>閾值</strong>與<strong>羽化半徑</strong>，讓邊緣更貼合；<br>2. 若畫面有多隻寵物或雜物，開啟<strong>僅保留最大主體</strong>；<br>3. 主體清晰、與背景對比明顯的照片效果最佳；<br>4. 如仍不理想，請將截圖與照片寄至 " + EMAIL + "。" },
+    { q: "老照片增強效果不明顯？", a: "增強針對輕微模糊、噪點、刮痕與褪色的老照片效果顯著。若照片嚴重破損、人臉大面積缺失，恢復程度會有限——建議保留原圖。" },
+    { q: "匯出的檔案儲存在哪裡？", a: "匯出完成後可選擇：<strong>儲存到照片</strong>（圖片/影片）、<strong>儲存到「檔案」</strong>（任意格式）或<strong>分享</strong>給其他 App。也可隨時回到對應紀念冊詳情頁重新匯出。" },
+    { q: "免費版和 Pro 有什麼區別？", a: "<strong>免費版：</strong>提供 5 次 AI 摳圖 + 老照片增強配額，匯出帶浮水印。<br><strong>Pro：</strong>無限量摳圖與增強、匯出無浮水印、完整 4 款 PDF 範本、1080p 短片匯出、iCloud 備份與紀念日提醒。" },
+    { q: "景深桌布需要什麼條件？", a: "景深桌布需要 <strong>iOS 16.1 或更高版本</strong>的鎖定畫面 Depth Effect 支援。舊系統將產生靜態桌布，功能不受影響。" },
+    { q: "Pro 訂閱如何退款？", a: "訂閱透過 Apple 官方管道處理，退款需透過 Apple 申請：<br>前往 <a href='https://reportaproblem.apple.com' target='_blank'>reportaproblem.apple.com</a> → 登入 Apple ID → 找到對應訂閱 → 申請退款。" },
+    { q: "如何取消自動續訂？", a: "在 iPhone 上打開 <strong>設定 → 你的 Apple ID → 訂閱</strong> → 找到 PawLume → 取消訂閱。取消後當前週期內仍可使用全部功能。" }
+  ],
+  subTitle: "訂閱與權限",
+  subLines: [
+    "<strong>免費版：</strong>提供 5 次 AI 摳圖與老照片增強配額，匯出帶浮水印。",
+    "<strong>Pro 訂閱：</strong>解鎖無限量寵物摳圖與老照片增強、單張匯出無浮水印、完整 PDF 紀念冊範本、1080p 短片紀念冊、iCloud 備份與紀念日提醒。支援月訂閱 / 年訂閱（含 7 天免費試用）/ 終身買斷。",
+    "<strong>自動續訂：</strong>訂閱到期前 24 小時自動扣款，可隨時在 Apple ID 設定中取消。",
+    "<strong>隱私權政策：</strong><a href='" + PRIVACY + "' target='_blank'>檢視完整隱私權政策</a> · <a href='" + EULA + "' target='_blank'>標準授權條款（EULA）</a>"
+  ],
+  privacy: "隱私權政策",
+  terms: "服務條款",
+  contactUs: "聯絡我們"
+};
+
+I18N["ja"] = {
+  langName: "日本語",
+  heroTitle: "PawLume サポート",
+  heroDesc: "彼らの優しい光を、そのままに。ローカル AI ペット切り抜き＋メモリーアルバム。すべて端末内で処理、サーバーへのアップロードは一切ありません。",
+  contactLabel: "お困りですか？メールください",
+  contactBtn: "メールを送る →",
+  featTitle: "クイックガイド",
+  feats: [
+    { icon: "cutout", title: "AI ペット切り抜き", desc: "写真を読込 → 切り抜きを選択 → 端末内 Core ML がペットを検出 → 閾値・ぼかしを調整 → 透明 PNG を生成。リアルタイムプレビュー、細かく調整可能。" },
+    { icon: "enhance", title: "古い写真の修復", desc: "ぼやけた・色あせた写真を読込 → ワンタップで補正 → ローカルモデルが鮮明化とノイズ除去、貴重な思い出をよみがえらせます。" },
+    { icon: "filter", title: "フィルターと背景変更", desc: "100 種類のフィルター（7 カテゴリ）をスライダーで強度調整。単色・カスタム画像への背景差し替えや、透明なまま保持も可能。" },
+    { icon: "export", title: "アルバムの書き出し", desc: "アルバムを開く → PDF / 動画 / メモリアルカード / 深度壁紙を選択 → ウォーターマークなしで書き出し、大切な人と共有。" }
+  ],
+  faqTitle: "よくある質問",
+  faqs: [
+    { q: "写真はサーバーにアップロードされますか？", a: "<strong>いいえ。</strong>すべての AI 処理（切り抜き、古写真修復）と写真の保存は、内蔵 Core ML モデルにより端末内で完結します。写真が外部に出ることは一切ありません。" },
+    { q: "AI 切り抜きの結果が思うようにいきません", a: "次の順でお試しください：<br>1. 切り抜き設定で<strong>閾値</strong>と<strong>ぼかし半径</strong>を調整し、エッジをなじませる；<br>2. 複数のペットや物がある場合は<strong>最大の被写体のみ保持</strong>をオンに；<br>3. 被写体がはっきりし、背景とコントラストがある写真が最適；<br>4. 解決しない場合はスクリーンショットと写真を " + EMAIL + " までお送りください。" },
+    { q: "古写真の補正が物足りません", a: "補正は軽いぼけ・ノイズ・キズ・色あせに効果的です。深刻な破損や顔の欠損がある写真は復元が限定的なため、元画像の保持をおすすめします。" },
+    { q: "書き出したファイルはどこに保存されますか？", a: "書き出し後、<strong>写真に保存</strong>（画像/動画）、<strong>ファイルに保存</strong>（全形式）、<strong>共有</strong>から選択できます。アルバム詳細画面からいつでも再書き出し可能です。" },
+    { q: "無料版と Pro の違いは？", a: "<strong>無料版：</strong>AI 切り抜き＋古写真修復を各 5 回、書き出しにウォーターマークあり。<br><strong>Pro：</strong>切り抜き・補正が無制限、書き出しに透かしなし、全 4 種の PDF テンプレート、1080p 動画書き出し、iCloud バックアップ＆記念日リマインダー。" },
+    { q: "深度壁紙には何が必要ですか？", a: "深度壁紙には <strong>iOS 16.1 以降</strong>のロック画面 Depth Effect が必要です。旧システムでは静的壁紙が生成されますが、機能に影響はありません。" },
+    { q: "Pro の返金はどうすればいいですか？", a: "サブスクリプションは Apple 経由で処理されます。返金は Apple に申請してください：<br><a href='https://reportaproblem.apple.com' target='_blank'>reportaproblem.apple.com</a> にアクセス → Apple ID でログイン → 該当サブスクを選択 → 返金をリクエスト。" },
+    { q: "自動更新をキャンセルするには？", a: "iPhone で <strong>設定 → Apple ID → サブスクリプション</strong> → PawLume を選択 → サブスクリプションをキャンセル。キャンセル後も現在の期間が終わるまで Pro 機能は使えます。" }
+  ],
+  subTitle: "サブスクリプションと権限",
+  subLines: [
+    "<strong>無料版：</strong>AI 切り抜き・古写真修復を各 5 回、書き出しにウォーターマークあり。",
+    "<strong>Pro：</strong>切り抜き・補正が無制限、単枚書き出しに透かしなし、全 PDF アルバムテンプレート、1080p 動画アルバム、iCloud バックアップ＆記念日リマインダー。月額 / 年額（7日間無料トライアル）/ 買い切りに対応。",
+    "<strong>自動更新：</strong>期間終了の 24 時間前に課金。Apple ID 設定でいつでもキャンセル可能。",
+    "<strong>プライバシーポリシー：</strong><a href='" + PRIVACY + "' target='_blank'>全文を見る</a> · <a href='" + EULA + "' target='_blank'>標準利用許諾契約（EULA）</a>"
+  ],
+  privacy: "プライバシーポリシー",
+  terms: "利用規約",
+  contactUs: "お問い合わせ"
+};
+
+I18N["ko"] = {
+  langName: "한국어",
+  heroTitle: "PawLume 지원",
+  heroDesc: "그들의 부드러운 빛을 간직하세요. 로컬 AI 반려동물 컷아웃 + 메모리 앨범. 모든 처리가 기기 내에서 이루어지며 서버 업로드는 없습니다.",
+  contactLabel: "도움이 필요하신가요? 이메일을 보내주세요",
+  contactBtn: "이메일 보내기 →",
+  featTitle: "빠른 가이드",
+  feats: [
+    { icon: "cutout", title: "AI 반려동물 컷아웃", desc: "사진 가져오기 → 컷아웃 선택 → 기기 내 Core ML이 반려동물 감지 → 임계값/페더 조정 → 투명 PNG 생성. 실시간 미리보기, 세밀한 조절 가능." },
+    { icon: "enhance", title: "옛 사진 향상", desc: "흐릿하고 바랜 사진 가져오기 → 원터치 향상 → 로컬 모델이 선명도 개선과 노이즈 제거, 소중한 추억을 되살립니다." },
+    { icon: "filter", title: "필터와 배경 바꾸기", desc: "7개 카테고리 100개 필터, 슬라이더로 강도 조절. 단색·사용자 정의 이미지로 배경 교체 또는 투명한 상태 유지." },
+    { icon: "export", title: "앨범 내보내기", desc: "앨범 열기 → PDF / 영상 / 메모리얼 카드 / 심도 배경화면 선택 → 워터마크 없이 내보내고 소중한 이와 공유." }
+  ],
+  faqTitle: "자주 묻는 질문",
+  faqs: [
+    { q: "사진이 서버에 업로드되나요?", a: "<strong>아니요.</strong> 모든 AI 처리(컷아웃, 옛 사진 향상)와 사진 저장은 내장 Core ML 모델로 기기 내에서 완료됩니다. 사진이 기기를 벗어나는 일은 없습니다." },
+    { q: "AI 컷아웃 결과가 만족스럽지 않습니다", a: "순서대로 시도해 보세요：<br>1. 컷아웃 설정에서 <strong>임계값</strong>과 <strong>페더 반경</strong>을 조절해 가장자리를 다듬으세요；<br>2. 여러 반려동물이나 물체가 있으면 <strong>가장 큰 개체만 유지</strong>를 켜세요；<br>3. 피사체가 선명하고 배경과 대비가 뚜렷한 사진이 가장 좋습니다；<br>4. 여전히 안 되면 스크린샷과 사진을 " + EMAIL + " 로 보내주세요." },
+    { q: "옛 사진 향상 효과가 약합니다", a: "향상은 가벼운 흐림·노이즈·긁힘·색바램에 효과적입니다. 심하게 손상되거나 얼굴이 없는 사진은 복원이 제한되므로 원본 보관을 권장합니다." },
+    { q: "내보낸 파일은 어디에 저장되나요?", a: "내보내기 후 <strong>사진에 저장</strong>(이미지/영상), <strong>파일에 저장</strong>(모든 형식), <strong>공유</strong> 중 선택할 수 있습니다. 앨범 상세 화면에서 언제든 다시 내보낼 수 있습니다." },
+    { q: "무료와 Pro의 차이는?", a: "<strong>무료:</strong> AI 컷아웃 + 향상을 각 5회, 내보내기 워터마크 있음.<br><strong>Pro:</strong> 컷아웃·향상 무제한, 내보내기 워터마크 없음, PDF 템플릿 4종, 1080p 영상 내보내기, iCloud 백업 & 기념일 알림." },
+    { q: "심도 배경화면에 필요한 조건은?", a: "심도 배경화면은 <strong>iOS 16.1 이상</strong> 잠금 화면 Depth Effect가 필요합니다. 구버전에서는 정적 배경화면이 생성되며 기능에는 영향이 없습니다." },
+    { q: "Pro 환불은 어떻게 받나요?", a: "구독은 Apple을 통해 처리되므로 환불도 Apple에 요청해야 합니다：<br><a href='https://reportaproblem.apple.com' target='_blank'>reportaproblem.apple.com</a> 접속 → Apple ID 로그인 → 해당 구독 찾기 → 환불 요청." },
+    { q: "자동 갱신을 취소하려면?", a: "iPhone에서 <strong>설정 → Apple ID → 구독</strong> → PawLume 찾기 → 구독 취소. 취소 후에도 현재 결제 기간이 끝날 때까지 Pro 기능을 사용할 수 있습니다." }
+  ],
+  subTitle: "구독 및 권한",
+  subLines: [
+    "<strong>무료:</strong> AI 컷아웃·향상을 각 5회, 내보내기 워터마크 있음.",
+    "<strong>Pro:</strong> 컷아웃·향상 무제한, 단건 내보내기 워터마크 없음, 전체 PDF 앨범 템플릿, 1080p 영상 앨범, iCloud 백업 & 기념일 알림. 월간 / 연간(7일 무료 체험) / 평생 구매 지원.",
+    "<strong>자동 갱신:</strong> 기간 종료 24시간 전 자동 결제. Apple ID 설정에서 언제든 취소 가능.",
+    "<strong>개인정보 처리방침:</strong> <a href='" + PRIVACY + "' target='_blank'>전문 보기</a> · <a href='" + EULA + "' target='_blank'>표준 사용권 계약(EULA)</a>"
+  ],
+  privacy: "개인정보 처리방침",
+  terms: "서비스 약관",
+  contactUs: "문의하기"
+};
+
+I18N["de"] = {
+  langName: "Deutsch",
+  heroTitle: "PawLume Support",
+  heroDesc: "Bewahre ihr sanftes Licht. Lokaler KI-Haustier-Freisteller + Erinnerungsalbum. Alle Verarbeitung läuft auf deinem Gerät — kein Upload auf irgendeinen Server.",
+  contactLabel: "Brauchen Sie Hilfe? Schreiben Sie uns",
+  contactBtn: "E-Mail senden →",
+  featTitle: "Kurzanleitungen",
+  feats: [
+    { icon: "cutout", title: "KI-Haustier-Freisteller", desc: "Foto importieren → Freisteller wählen → lokales Core ML erkennt dein Tier → Schwellwert & Weichzeichnung anpassen → transparentes PNG erzeugen. Echtzeit-Vorschau, fein einstellbar." },
+    { icon: "enhance", title: "Alte-Foto-Verbesserung", desc: "Unscharfe oder verblasste Fotos importieren → mit einem Tipp verbessern → lokales Modell schärft und reduziert Rauschen, wertvolle Erinnerungen werden wieder lebendig." },
+    { icon: "filter", title: "Filter & Hintergründe", desc: "100 Filter in 7 Kategorien, Intensität per Regler einstellbar. Hintergrund in Einfarbig oder eigenes Bild tauschen oder den Ausschnitt transparent behalten." },
+    { icon: "export", title: "Album exportieren", desc: "Album öffnen → PDF / Video / Erinnerungskarte / Tiefen-Wallpaper wählen → wasserzeichenfrei exportieren und mit Liebsten teilen." }
+  ],
+  faqTitle: "Häufige Fragen",
+  faqs: [
+    { q: "Werden meine Fotos auf einen Server hochgeladen?", a: "<strong>Nein.</strong> Alle KI-Verarbeitung (Freisteller, Alte-Foto-Verbesserung) und die Fotospeicherung laufen lokal auf deinem Gerät über die eingebaute Core ML-Engine. Deine Fotos verlassen dein Gerät nie." },
+    { q: "Das KI-Freisteller-Ergebnis ist nicht ideal. Was tun?", a: "Bitte in dieser Reihenfolge prüfen：<br>1. <strong>Schwellwert</strong> und <strong>Weichzeichnungsradius</strong> einstellen, um die Kanten anzupassen；<br>2. Bei mehreren Tieren oder Objekten <strong>Nur größtes Motiv behalten</strong> aktivieren；<br>3. Klare Fotos mit deutlichem Kontrast zum Hintergrund funktionieren am besten；<br>4. Falls weiterhin nicht: Senden Sie Screenshot und Foto an " + EMAIL + "." },
+    { q: "Die Alte-Foto-Verbesserung wirkt dezent?", a: "Die Verbesserung hilft bei leichter Unschärfe, Rauschen, Kratzern und Verblassen. Bei stark beschädigten Fotos oder fehlenden Gesichtern ist die Wiederherstellung begrenzt — das Original aufbewahren." },
+    { q: "Wo werden exportierte Dateien gespeichert?", a: "Nach dem Export können Sie zwischen <strong>In Fotos sichern</strong> (Bild/Video), <strong>In Dateien sichern</strong> (jedes Format) oder <strong>Teilen</strong> wählen. Sie können jederzeit aus der Album-Detailseite erneut exportieren." },
+    { q: "Was ist der Unterschied zwischen Free und Pro?", a: "<strong>Kostenlos:</strong> 5 Freistellungs- und Verbesserungsguthaben, Exporte mit Wasserzeichen.<br><strong>Pro:</strong> Unbegrenzte Freisteller & Verbesserung, wasserzeichenfreie Exporte, alle 4 PDF-Vorlagen, 1080p-Videoalben, iCloud-Backup & Jahrestag-Erinnerungen." },
+    { q: "Was brauche ich für das Tiefen-Wallpaper?", a: "Das Tiefen-Wallpaper benötigt <strong>iOS 16.1 oder neuer</strong> mit Depth Effect auf dem Sperrbildschirm. Auf älteren Systemen wird ein statisches Wallpaper erzeugt — die Funktion ist davon nicht betroffen." },
+    { q: "Wie bekomme ich eine Rückerstattung für Pro?", a: "Abonnements werden von Apple verwaltet. Rückerstattung über Apple beantragen：<br>Gehen Sie auf <a href='https://reportaproblem.apple.com' target='_blank'>reportaproblem.apple.com</a> → mit Apple ID anmelden → Abonnement finden → Rückerstattung beantragen." },
+    { q: "Wie kündige ich die automatische Verlängerung?", a: "Gehen Sie auf dem iPhone zu <strong>Einstellungen → Ihre Apple ID → Abonnements</strong> → PawLume finden → Abonnement kündigen. Pro-Funktionen bleiben bis zum Ende des aktuellen Zeitraums aktiv." }
+  ],
+  subTitle: "Abo & Zugriff",
+  subLines: [
+    "<strong>Kostenlos:</strong> 5 Freistellungs- und Verbesserungsguthaben, Exporte mit Wasserzeichen.",
+    "<strong>Pro:</strong> Unbegrenzte Freisteller und Alte-Foto-Verbesserung, wasserzeichenfreie Einzelexporte, alle PDF-Albumvorlagen, 1080p-Videoalben, iCloud-Backup & Jahrestag-Erinnerungen. Monatlich / Jährlich (7 Tage kostenlos testen) / Einmalkauf verfügbar.",
+    "<strong>Automatische Verlängerung:</strong> Wird 24 Stunden vor Ablauf berechnet. Jederzeit in den Apple ID-Einstellungen kündbar.",
+    "<strong>Datenschutz:</strong> <a href='" + PRIVACY + "' target='_blank'>Vollständige Datenschutzerklärung ansehen</a> · <a href='" + EULA + "' target='_blank'>Standard-Lizenzvereinbarung (EULA)</a>"
+  ],
+  privacy: "Datenschutz",
+  terms: "Nutzungsbedingungen",
+  contactUs: "Kontakt"
+};
+
+I18N["fr"] = {
+  langName: "Français",
+  heroTitle: "Support PawLume",
+  heroDesc: "Préservez leur douce lumière. Détourage IA local d'animaux + album souvenir. Tout le traitement s'effectue sur votre appareil — aucun envoi vers un serveur.",
+  contactLabel: "Besoin d'aide ? Écrivez-nous",
+  contactBtn: "Envoyer un e-mail →",
+  featTitle: "Guides rapides",
+  feats: [
+    { icon: "cutout", title: "Détourage IA d'animal", desc: "Importer une photo → choisir Détourage → le Core ML local détecte votre animal → régler seuil et fondu → générer un PNG transparent. Aperçu en temps réel, réglages fins." },
+    { icon: "enhance", title: "Amélioration de vieilles photos", desc: "Importer des photos floues ou jaunies → améliorer en un geste → le modèle local affine et réduit le bruit, donnant vie à de précieux souvenirs." },
+    { icon: "filter", title: "Filtres & arrière-plans", desc: "100 filtres en 7 catégories, intensité réglable par curseur. Remplacez l'arrière-plan par une couleur ou une image, ou gardez le sujet transparent." },
+    { icon: "export", title: "Exporter votre album", desc: "Ouvrir un album → choisir PDF / Vidéo / Carte souvenir / Fonds d'écran profondeur → exporter sans filigrane et partager avec vos proches." }
+  ],
+  faqTitle: "Questions fréquentes",
+  faqs: [
+    { q: "Mes photos sont-elles envoyées vers un serveur ?", a: "<strong>Non.</strong> Tout le traitement IA (détourage, amélioration) et le stockage des photos s'effectuent localement sur votre appareil grâce aux modèles Core ML intégrés. Vos photos ne quittent jamais votre appareil." },
+    { q: "Le résultat du détourage IA est décevant", a: "Essayez dans l'ordre：<br>1. Ajustez le <strong>seuil</strong> et le <strong>rayon de fondu</strong> pour des bords plus précis；<br>2. Avec plusieurs animaux ou objets, activez <strong>Conserver uniquement le plus grand sujet</strong>；<br>3. Les photos nettes avec un bon contraste donnent les meilleurs résultats；<br>4. Si le problème persiste, envoyez une capture d'écran et la photo à " + EMAIL + "." },
+    { q: "L'amélioration des vieilles photos semble légère ?", a: "L'amélioration agit bien sur le flou léger, le bruit, les rayures et la décoloration. Les photos très endommagées ou sans visage ne sont que partiellement restaurées — conservez l'original." },
+    { q: "Où sont enregistrés les fichiers exportés ?", a: "Après l'export, choisissez <strong>Enregistrer dans Photos</strong> (image/vidéo), <strong>Enregistrer dans Fichiers</strong> (tout format) ou <strong>Partager</strong>. Vous pouvez réexporter à tout moment depuis la page de détail de l'album." },
+    { q: "Quelle est la différence entre gratuit et Pro ?", a: "<strong>Gratuit :</strong> 5 crédits de détourage et d'amélioration, exports avec filigrane.<br><strong>Pro :</strong> détourages et améliorations illimités, exports sans filigrane, 4 modèles PDF, vidéos 1080p, sauvegarde iCloud & rappels d'anniversaire." },
+    { q: "Que faut-il pour le fond d'écran profondeur ?", a: "Le fond d'écran profondeur nécessite <strong>iOS 16.1 ou ultérieur</strong> avec l'effet de profondeur sur l'écran de verrouillage. Sur les anciens systèmes, un fond d'écran statique est généré — la fonction reste disponible." },
+    { q: "Comment obtenir un remboursement Pro ?", a: "Les abonnements sont gérés par Apple. Pour demander un remboursement：<br>Rendez-vous sur <a href='https://reportaproblem.apple.com' target='_blank'>reportaproblem.apple.com</a> → connectez-vous avec votre identifiant Apple → trouvez l'abonnement → demandez le remboursement." },
+    { q: "Comment résilier le renouvellement automatique ?", a: "Sur votre iPhone, ouvrez <strong>Réglages → votre identifiant Apple → Abonnements</strong> → trouvez PawLume → Résilier l'abonnement. Les fonctionnalités Pro restent actives jusqu'à la fin de la période en cours." }
+  ],
+  subTitle: "Abonnement & accès",
+  subLines: [
+    "<strong>Gratuit :</strong> 5 crédits de détourage et d'amélioration, exports avec filigrane.",
+    "<strong>Pro :</strong> détourages et améliorations illimités, exports uniques sans filigrane, tous les modèles PDF d'album, albums vidéo 1080p, sauvegarde iCloud & rappels d'anniversaire. Abonnements mensuel / annuel (essai gratuit 7 jours) / achat à vie disponibles.",
+    "<strong>Renouvellement automatique :</strong> Facturé 24 h avant la fin de chaque période. Résiliable à tout moment dans les réglages de votre identifiant Apple.",
+    "<strong>Politique de confidentialité :</strong> <a href='" + PRIVACY + "' target='_blank'>Voir la politique complète</a> · <a href='" + EULA + "' target='_blank'>Contrat de licence standard (EULA)</a>"
+  ],
+  privacy: "Confidentialité",
+  terms: "Conditions d'utilisation",
+  contactUs: "Nous contacter"
+};
+
+// __MORE_LANGS__
+
+// ===== BUILD UI =====
+var ICONS = {
+  cutout: '<svg viewBox="0 0 24 24"><path d="M12 3l2 6 6 0-4.5 4 1.5 6L12 16l-5 3 1.5-6L4 9l6 0z"/></svg>',
+  enhance: '<svg viewBox="0 0 24 24"><path d="M12 3v6M9 6h6"/><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 13l4 3-4 3-4-3z"/></svg>',
+  filter: '<svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v5l-4 2v-7z"/></svg>',
+  export: '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+};
+
+var LANGS = ["zh-CN", "zh-TW", "en", "ja", "ko", "de", "fr"];
+var currentLang = "zh-CN";
+
+function detectLang() {
+  var nav = (navigator.language || "en").toLowerCase();
+  if (nav.indexOf("zh") === 0) {
+    if (nav.indexOf("tw") > -1 || nav.indexOf("hk") > -1) return "zh-TW";
+    return "zh-CN";
+  }
+  for (var i = 0; i < LANGS.length; i++) {
+    if (nav.indexOf(LANGS[i]) === 0) return LANGS[i];
+  }
+  return "en";
+}
+
+function applyLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === "zh-CN" ? "zh-CN" : lang;
+  var t = I18N[lang];
+
+  document.querySelectorAll("[data-i18n]").forEach(function(el) {
+    var key = el.getAttribute("data-i18n");
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+
+  var fg = document.getElementById("featGrid");
+  fg.innerHTML = "";
+  t.feats.forEach(function(f) {
+    var div = document.createElement("div");
+    div.className = "feat";
+    div.innerHTML = '<div class="icon">' + ICONS[f.icon] + '</div><h3></h3><p></p>';
+    div.querySelector("h3").textContent = f.title;
+    div.querySelector("p").textContent = f.desc;
+    fg.appendChild(div);
+  });
+
+  var fl = document.getElementById("faqList");
+  fl.innerHTML = "";
+  t.faqs.forEach(function(f) {
+    var item = document.createElement("div");
+    item.className = "faq-item";
+    item.innerHTML = '<div class="faq-q" onclick="toggleFaq(this)"><span class="qtext"></span><span class="arrow">▼</span></div><div class="faq-a"><div class="faq-a-inner"></div></div>';
+    item.querySelector(".qtext").textContent = f.q;
+    item.querySelector(".faq-a-inner").innerHTML = f.a;
+    fl.appendChild(item);
+  });
+
+  var sb = document.getElementById("subBlock");
+  sb.innerHTML = "";
+  t.subLines.forEach(function(line) {
+    var p = document.createElement("p");
+    p.innerHTML = line;
+    sb.appendChild(p);
+  });
+
+  var lb = document.getElementById("langBar");
+  lb.innerHTML = "";
+  LANGS.forEach(function(l) {
+    var b = document.createElement("button");
+    b.className = "lang-btn" + (l === lang ? " active" : "");
+    b.textContent = I18N[l].langName;
+    b.onclick = function() { applyLang(l); };
+    lb.appendChild(b);
+  });
+
+  document.title = "PawLume · " + t.heroTitle;
+}
+
+function toggleFaq(el) {
+  el.parentElement.classList.toggle("open");
+}
+
+// init
+applyLang(detectLang());
+</script>
+
+</body>
+</html>
 
